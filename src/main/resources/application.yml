@@ -1,0 +1,115 @@
+server:
+  port: 9900
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
+
+file:
+  upload:
+    path: ./uploads
+    allowed-extensions: txt,md
+
+milvus:
+  host: localhost
+  port: 19530
+  username: ""
+  password: ""
+  database: default
+  timeout: 10000
+
+# Spring AI Alibaba DashScope 配置
+spring:
+  ai:
+    dashscope:
+      api-key: sk-3cd2e271f67948a6b39d99599825b8c7  # 从环境变量读取或使用默认值
+      chat:
+        options:
+          timeout: 180000  # 超时时间180秒（3分钟）
+      retry:
+        max-attempts: 3  # 最大重试次数
+        backoff:
+          initial-interval: 2000  # 初始重试间隔2秒
+          multiplier: 2  # 重试间隔倍数
+          max-interval: 10000  # 最大重试间隔10秒
+  # Elasticsearch 配置
+  elasticsearch:
+    uris: http://localhost:9200
+    connection-timeout: 10s
+    socket-timeout: 30s
+
+  # Spring AI MCP 客户端配置
+  # 如果使用mock数据，请注释这部分内容
+  mcp:
+    client:
+      enabled: true
+      name: tencent-mcp-server
+      version: 1.0.0
+      request-timeout: 60s
+      type: ASYNC
+      sse:
+        connections:
+          tencent-cls:
+            url: https://mcp-api.tencent-cloud.com
+            sse-endpoint: /sse/961845012aea6818  # 完整的SSE端点路径
+
+# 阿里云 DashScope Embedding API 配置
+dashscope:
+  api:
+    key: sk-3cd2e271f67948a6b39d99599825b8c7  # 从环境变量读取或使用默认值（用于自定义配置）
+  embedding:
+    model: text-embedding-v4  # 阿里云文本向量化模型
+
+# 文档分片配置
+document:
+  chunk:
+    max-size: 800  # 每个分片最大字符数
+    overlap: 100   # 分片之间的重叠字符数
+
+# RAG 配置
+rag:
+  top-k: 3  # 检索返回的最相似文档数量
+  model: "qwen3-max"  # 大语言模型名称
+  intent:
+    threshold: 0.4  # 意图识别置信度阈值
+    descriptions:
+      knowledge: "用户询问知识库中的概念、原理、定义、故障排查、问题诊断及运维相关问题，包括服务器无法连接、CPU使用率高、磁盘空间不足、内存泄漏、Nginx异常、数据库连接问题、Docker容器问题、日志分析方法、备份恢复操作、性能监控命令、安全检查等运维故障诊断和问题解答"
+      code: "用户要求生成、编写、调试代码或提供编程解决方案"
+      realtime: "用户询问当前时间、实时指标、在线状态等需要即时数据的问题"
+      system: "用户要求执行系统管理、配置更改、运维操作等"
+      chitchat: "用户进行日常寒暄、问候或无明确目的的对话"
+
+# 混合检索配置
+hybrid:
+  candidate-k: 10  # 每路召回的候选数量（用于 RRF 融合）
+
+# 阿里云 DashScope Rerank 配置
+DashScope:
+  api:
+    key: sk-3cd2e271f67948a6b39d99599825b8c7  # 阿里云 DashScope API Key
+  rerank:
+    model: qwen3-rerank  # 重排模型名称（使用阿里云 qwen3 系列重排模型）
+    top-n: 3  # 重排后返回的结果数量
+
+# Prometheus 配置
+prometheus:
+  base-url: http://localhost:9090
+  timeout: 10  # 超时时间（秒）
+  mock-enabled: false  # 是否启用 Mock 模式（用于测试）
+
+# CLS 云日志服务配置
+cls:
+  mock-enabled: false  # 是否启用 Mock 模式
+  # 腾讯云 CLS 真实配置
+  enabled: true  # 是否启用真实 CLS 查询
+  secret-id: "AKIDeNvKVVIua3LQJzTlpobAVcWDhw0rVyDG"  # 腾讯云 SecretId（请填入您的 SecretId）
+  secret-key: "scAWfbKrCJ2av3yhFat0vgFcljUjlbEe"  # 腾讯云 SecretKey（请填入您的 SecretKey）
+  region: ap-guangzhou  # 地域
+  endpoint: cls.ap-guangzhou.tencentcloudapi.com  # CLS API 端点
+  # 日志主题 ID 配置（请填入实际的 TopicId）
+  topics:
+    system-metrics: "bb8f663d-87ed-4d03-b290-c0f2ad30190f"      # 系统指标日志主题 ID
+    application-logs: "27f0ef6c-268c-47d6-97e5-647fd2556b3d"    # 应用日志主题 ID
+    database-slow-query: "078dc843-5ed9-42ed-b155-1912f9d357c1" # 数据库慢查询日志主题 ID
+    system-events: "547f862f-8698-467f-95ca-c978c218aef5"      # 系统事件日志主题 ID

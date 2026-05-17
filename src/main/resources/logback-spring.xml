@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Spring AI MCP 相关日志 -->
+    <logger name="org.springframework.ai.mcp" level="DEBUG"/>
+    <logger name="io.modelcontextprotocol" level="DEBUG"/>
+    <logger name="reactor.netty" level="INFO"/>
+    <logger name="org.springframework.web.reactive" level="INFO"/>
+
+    <!-- 应用日志 -->
+    <logger name="org.example" level="INFO"/>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+</configuration>
